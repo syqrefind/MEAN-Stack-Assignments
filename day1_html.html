@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <style>
+            fieldset{
+                display: block;
+                margin-left: 2px;
+                margin-right: 2px;
+                padding-top: 0.35em;
+                padding-bottom: 0.625em;
+                padding-left: 0.75em;
+                padding-right: 0.75em;
+                border: 5px solid;
+                background-color: blanchedalmond;
+                border-color: yellow;
+                font-size: 15;
+                margin:auto;
+                text-align: center;
+                width:700px;
+                height: auto;
+            }
+
+            
+            
+            .align-center{
+                display: block;
+                margin: 1.0em auto;
+                text-align: center;
+            }
+            
+        
+
+            .inline{
+                width:35px;
+                display: inline-block;
+            }
+            .inside-inline {
+            font-size: 0.8rem;
+            line-height:0.8rem;
+            text-align:center;
+            }
+            .inside-inline span {
+              display:inline-block;
+              width:300px;
+              text-align:left;
+            }
+            .inside-inline span:first-of-type {
+              text-align:right;
+            }
+            legend:hover{
+                font-size: 25px;
+            }
+            
+
+    
+            
+        </style>
+        <script type="text/javascript"> 
+        function previewImage(){
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+            oFReader.onload = function (oFREvent) {
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+            };
+        };
+    
+        </script>
+        
+    </head>
+    
+    <body>
+        <h1 style="text-align:center">Please Enter Your Details For Our Dating Website!</h1>
+        <div class="pos">
+            <form>
+                <fieldset> <legend id="ld0" style="text-align:left">Your Face</legend>
+                    <div class="inside-inline">
+                        <div>
+                            <span>Your image: </span><span><input id="uploadImage" type="file" name="myPhoto" onchange="previewImage();" /></span>
+                        </div>
+                        <div>
+                            <span>Image preview: </span><span>
+                                <img id="uploadPreview" style="width:100%; height:auto;" />
+                            </span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset><legend style="text-align: left"> General Details </legend> 
+    
+                    <div class="inside-inline">
+                        <div><span>Name: </span><span><input stype="text"></span></div>
+                        <div><span>Gender: </span><span><input type="radio" name="rad">Male<input type="radio" name="rad">Female</span></div>
+                        <div><span>Age: </span><span><input type="text" value="18"></span></div>
+                        <div><span>Date of birth: </span><span><input type="date"></span></div>
+                        <div><span>Favorite color: </span><span><input type="color"></span></div>
+                        <div><span>Which country: </span><span>
+                            <select>
+                                <option disabled selected value></option>
+                                <option> United States</option>
+                                <option> Mexico</option>
+                            </select> 
+                        </span></div>
+                    </div>
+                </fieldset>
+    
+                <fieldset> <legend style="text-align:left" >Your Indicators</legend>
+                    <div class="inside-inline">
+                        <div>
+                            <span>Height: </span><span><p class= "inline" style="background-color:tomato; display:inline-block;width:35px;">Short</p><input type="range"> <p style="background-color:purple; display: inline-block; width: 35px;">Tall</p></span>
+                        </div>
+                        <div>
+                            <span>Salary: </span><span><p class="inline" style="background-color:tomato">Poor</p><input type="range"> <p class="inline" style="background-color:purple">Rich</p> </span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset> <legend style="text-align:left">Your Contact Information</legend>
+    
+                    <div class="inside-inline">
+                        <div>
+                            <span>Email: </span><span><input type="text"></span> 
+                        </div>
+                        <div>
+                            <span>Mobile: </span><span><input type="text"> </span>
+                        </div>
+                        <div>
+                            <span>Address: </span><span><textarea style="vertical-align:text-top"></textarea></span>
+                        </div>
+                        <div>
+                            <span>Method to contact you:</span> <span><input type="checkbox"/>Email <input type="checkbox"/>Whatsapp <input type="checkbox"/>In-app chat</span>
+                        </div>
+                    </div>
+                </fieldset>
+        </div>
+        
+        <div class="pos" style="margin:auto; width:735px">
+            <input type="submit" value="Submit!">
+        </div>
+            </form>
+
+
+    </body>
+
+</html>
