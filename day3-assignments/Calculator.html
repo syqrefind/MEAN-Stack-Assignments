@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="Calculator.js"></script>
+    <script>calculator0 = new Calculator();</script>
+    <script>function clickToSeeSum(){
+                document.getElementById("result").innerHTML = calculator0.sum();
+            }
+            function clickToSeeMul(){
+                document.getElementById("result").innerHTML = calculator0.mul();
+            }</script>
+</head>
+<body>
+    <div>
+        <p id="result"></p>
+        <button type="button" onclick="clickToSeeSum()">Sum()</button>
+        <button type="button" onclick="clickToSeeMul()">Mul()</button>
+    </div>
+    
+</body>
+</html>
