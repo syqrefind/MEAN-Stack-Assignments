@@ -4,8 +4,6 @@ function Hero(name, occupation){
 }
 
 Hero.prototype.whoAreYou = function(){
-    //console.log("My name is " + this.name + " and I am a " + this.occupation + "."
-    //return "My name is " + this.name + " and I am a " + this.occupation + "."
     return(`My name is ${this.name} and I am a ${this.occupation}.`)
 };
 
