@@ -1,0 +1,10 @@
+> 30 + 40
+70
+> console.log("Hello World")
+Hello World
+undefined
+> 365*24*60*60
+31536000
+> 100*365*24*60*60
+3153600000
+> .exit
