@@ -1,0 +1,264 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+    
+    div .inside-center{
+        text-align: center;
+    }
+
+    div .inside-center span{
+        text-align: left;
+    }
+    div .inside-center span:first-of-type{
+        text-align: right;
+    }
+    div .navi {
+        display:inline-block;
+    }
+    div .icon {
+        display: inline-block;
+        background-color: beige;
+    }
+    span {
+        display: inline-block;
+    }
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+    .DataEntries:hover {
+        background-color: aliceblue;
+    }
+    /*a .navi i .fas fa-chevron-right{
+        
+    }*/
+    </style>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript"> 
+    function formatDetails (d) {
+    // `d` is the original data object for the row
+    var extra = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Addresses:</td>'+
+            '<td>'+'<select id="subSelect0"></select>'+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Marks:</td>'+
+            '<td>'+'<select id="subSelect1"></select>'+'</td>'+
+        '</tr>'+
+    '</table>';
+    
+    
+    return extra;
+    }
+    function makeTable(container, data) {
+        var table = $("<table/>").addClass('CSSTableGenerator');
+        var tableWithHead = table.append('<thead><tr><th>Icon Col.</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Locations</th><th>Phone Number</th></tr>');
+        //tableBody = table.append('<tbody/>');
+        //var index = 0;
+        $.each(data, function(key, val) {
+            var row = $("<tr/>");
+            rowWithIcon = row.append("<td><span>icon</span></td>");
+            $.each(val, function(colIndex, c) { 
+                row.append($("<t"+(key== 0 ?  "h" : "d")+"/>").text(c));
+            });
+            table.append(row);
+        });
+        return container.append(table);
+    }
+
+//     $(document).ready(function() {
+//         $.getJSON( "./dummy.json", function(data) {
+//         localStorage.setItem('dummyDataSet', JSON.stringify(data));
+//         });
+
+//         var table = $('#example').DataTable( {
+//             "ajax": "./dummy.json",
+//             "columns": [
+//                 {
+//                     "className":      'details-control',
+//                     "orderable":      false,
+//                     "data":           null,
+//                     "defaultContent": ''
+//                 },
+//                 { "data": "name" },
+//                 { "data": "position" },
+//                 { "data": "office" },
+//                 { "data": "salary" }
+//             ],
+//             "order": [[1, 'asc']]
+//         } );
+     
+//     // Add event listener for opening and closing details
+//     $('#example tbody').on('click', 'td.details-control', function () {
+//         var tr = $(this).closest('tr');
+//         var row = table.row( tr );
+ 
+//         if ( row.child.isShown() ) {
+//             // This row is already open - close it
+//             row.child.hide();
+//             tr.removeClass('shown');
+//         }
+//         else {
+//             // Open this row
+//             row.child( format(row.data()) ).show();
+//             tr.addClass('shown');
+//         }
+//     } );
+// } );
+
+    $(document).ready(function(){
+        var currentPage = 0;
+        var numRowsPerPage= 10;
+
+        $.getJSON( "./dummy.json", function(data) {
+            localStorage.setItem('dummyDataSet', JSON.stringify(data));
+            //storedData = localStorage.getItem('dummyDataSet');
+            //confirm(storedData);
+            makeTable($(document.body), data);
+            $('table tr').hide().slice(0,10).show();
+        });
+        $('#selector0').change(function(){
+            numRowsPerPage = $('selector0');
+            $('table tr').hide().slice(0,$('#selector0').val()).show();
+        });
+        $('#right').click(function(){
+            //confirm(`'>' is clicked!`)
+            if (currentPage == 100 / numRowsPerPage - 1){
+                //confirm('This is already the last page!');
+                return;
+            }
+            currentPage += 1;
+            $('table tr').hide().slice(currentPage * numRowsPerPage, (currentPage + 1) * numRowsPerPage).show();
+            
+        });
+        $('#left').click(function(){
+            if (currentPage <= 0){
+                return;
+            }
+            $('table tr').hide().slice((currentPage - 1) * numRowsPerPage, currentPage * numRowsPerPage).show();
+        });
+        // $('.icon').click(function(){
+        //     confirm('class icon is clicked!');
+        // });
+        // $('span').click(function(){
+        //     confirm('span is clicked!');
+        // });
+        // $('table tr td').click(function(){
+        //     confirm('td is clicked!');
+        // });
+        $('table #example tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+    
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
+        } );
+
+        $('div .DataEntries').on('click', function(){
+            confirm('in-table div is clicked!');
+        });
+        
+    });
+
+    </script>
+</head>
+
+<body>
+    <h2>Welcome to Student Manage Management!</h2>
+    <!-- <ol class="my-new-list"></ol> -->
+    <div class="inside-center">
+        <form>
+            <fieldset><legend>Search for Entries:</legend>
+                <div style="margin:auto;">
+                    <span>First Name:</span><span><input style="display:inline-block"/></span>
+                    <span>Last Name:</span><span><input style="display:inline-block"/></span>
+                    <span>Location:</span><span><input style="display:inline-block"/></span>
+                    <span>Phone Number:</span><span><input style="display:inline-block"/></span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div>
+        <form>
+            Select #Rows to Display:
+            <select name="RowsToDisplay" id='selector0'>
+                <option value="10">10</option> 
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div id="left"class="navi"><i class="fas fa-chevron-left" style="size:7x"></i></div>
+            <div id="right"class="navi"><i class="fas fa-chevron-right" style="size:7x"></i></div>
+            <div id="2top" class="navi">
+                <i class="fas fa-arrow-to-top"></i>
+            </div>
+        </form>
+    </div>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>icons</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Locations</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th><div class="DataEntries" style="display:inline-block;">icon</div></th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Locations</th>
+                <th>Phone Number</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <script>
+    //              var items = [];
+//              $.each(data, function(key, val) {
+//                  items.push(`<li id='${key}'>${val.firstname} ${val.lastname} ${val.location} ${val.phone}</li>`);
+//              });
+//              $("<ol/>", {
+//                  "class": "my-new-list",
+//                  html: items.join("")
+//              }).appendTo("body");
+    </script>
+</body>
+</html>

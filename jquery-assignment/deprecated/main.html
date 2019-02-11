@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    //function loadJSON() {
+     //   var xhttp = new XMLHttpRequest();
+     //   xhttp.onreadystatechange = function() {
+     //       //if (this.readyState == 4 && this.status == 200) {
+     //       //    document.getElementById("div1").innerHTML =
+     //       //    this.responseText;
+     //       //}
+     //       document.getElementById('div1').innerHTML = this.responseText;
+     //   };
+     //   xhttp.open("GET", "dummy.json", true);
+     //   xhttp.send();
+    //}
+    </script>
+
+    <script id="myTemplate" type="text/html">
+        <li> ${entry} </li>
+    </script>
+
+    <script>
+    $("#myTemplate").template("JSONTemplate");
+    $.ajax({
+        type : 'GET',
+        dataType : 'json',
+        url: '/dummy.json',
+        success : function(data) {
+            console.log(data); 
+            var topics = []; // array of objects
+            $.each(data.results, function(index, obj){
+                topics.push({
+                    firstname: obj.firstname,
+                    lastname: obj.lastname,
+                    location: obj.location,
+                    phone: obj.phone,
+                }); 
+            });
+            //$('#myTemplate').tmpl(topics).appendTo('ul');
+            $.tmpl("JSONTemplate", data).appendTo("ol");
+        } 
+    });
+    </script>
+
+    <script>
+        //$.ajax({url: "./dummy.json", success:function(){
+        //    // put data into local storage
+            
+        //}});
+        $('button').click(function(){
+            loadJSON();
+        })
+        
+    </script>
+</head>
+<body>
+    <div id="div1">
+        <h2>Let's see some JSON file here.</h2>
+    </div>
+    
+    <ol>List of Data:</ol>
+
+    <button type="button">Let's go!</button>
+
+</body>
+</html>

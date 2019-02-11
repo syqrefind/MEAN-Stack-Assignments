@@ -1,0 +1,18 @@
+{
+    "firstname" : "Stephan",
+    "lastname" : "Yu",
+    "email" : "stephan@itlize.com",
+    "location" : ["Piscataway", "New York", "California"],
+    "cars":[ "Ford", "BMW", "Fiat" ],
+    "phone" : "2021231234",
+    "address" : {
+        "communication": "Itlize, Piscataway, New Jersey",
+        "permanent" : "China"
+    },
+    "marks" : {
+    "english" : "70",
+    "science" : "80",
+    "computers" : "90",
+    "hardware" : "80"
+    }
+}
