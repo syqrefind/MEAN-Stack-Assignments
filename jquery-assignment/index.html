@@ -4,8 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Student Management System</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <style>
     table {
         font-family: arial, sans-serif;
@@ -40,9 +41,7 @@
         display: inline-block;
         background-color: beige;
     }
-    span {
-        display: inline-block;
-    }
+   
     td.details-control {
         background: url('../resources/details_open.png') no-repeat center center;
         cursor: pointer;
@@ -50,17 +49,34 @@
     tr.shown td.details-control {
         background: url('../resources/details_close.png') no-repeat center center;
     }
+    div .DataEntries{
+        display: inline-block;
+        text-align: center;
+    }
     .DataEntries:hover {
         background-color: aliceblue;
     }
-    /*a .navi i .fas fa-chevron-right{
-        
-    }*/
+    .rows:hover {
+        background-color: antiquewhite;
+    }
+    th {
+        text-align: center;
+    }
+    td{
+        text-align: center;
+    }
+    /* far fa-plus-circle:hover {
+        background-color: beige;
+    } */
+    
+
     </style>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript"> 
+
     function formatDetails (d) {
     // `d` is the original data object for the row
     var extra = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
@@ -73,20 +89,18 @@
             '<td>'+'<select id="subSelect1"></select>'+'</td>'+
         '</tr>'+
     '</table>';
-    
-    
     return extra;
     }
     function makeTable(container, data) {
         var table = $("<table/>").addClass('CSSTableGenerator');
-        var tableWithHead = table.append('<thead><tr><th>Icon Col.</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Locations</th><th>Phone Number</th></tr>');
-        //tableBody = table.append('<tbody/>');
-        //var index = 0;
+        var tableWithHead = table.append('<tr><th>Icon Col.</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Locations</th><th>Phone Number</th></tr>');
+       
         $.each(data, function(key, val) {
-            var row = $("<tr/>");
-            rowWithIcon = row.append("<td><span>icon</span></td>");
+            var row = $("<tr class='rows'/>");
+            rowWithIcon = row.append("<td><span class='clickSpan'><i class='far fa-plus-circle'></i></span></td>");
             $.each(val, function(colIndex, c) { 
-                row.append($("<t"+(key== 0 ?  "h" : "d")+"/>").text(c));
+                //row.append($("<t"+(key== 0 ?  "h" : "d")+"/>").text(c));
+                row.append($("<t"+(key== 0 ?  "h" : "d")+ " class='cells'" +"/>").text(c));
             });
             table.append(row);
         });
@@ -138,10 +152,11 @@
         var numRowsPerPage= 10;
 
         $.getJSON( "./dummy.json", function(data) {
+            //confirm(data);
             localStorage.setItem('dummyDataSet', JSON.stringify(data));
-            //storedData = localStorage.getItem('dummyDataSet');
+            var storedData = JSON.parse(localStorage.getItem('dummyDataSet'));
             //confirm(storedData);
-            makeTable($(document.body), data);
+            var wholeTable = makeTable($(document.body), storedData);
             $('table tr').hide().slice(0,10).show();
         });
         $('#selector0').change(function(){
@@ -163,36 +178,48 @@
                 return;
             }
             $('table tr').hide().slice((currentPage - 1) * numRowsPerPage, currentPage * numRowsPerPage).show();
+            currentPage -= 1;
         });
-        // $('.icon').click(function(){
-        //     confirm('class icon is clicked!');
-        // });
-        // $('span').click(function(){
-        //     confirm('span is clicked!');
-        // });
-        // $('table tr td').click(function(){
-        //     confirm('td is clicked!');
-        // });
-        $('table #example tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row( tr );
+
+        // $('table #example tbody').on('click', 'td.details-control', function () {
+        //     var tr = $(this).closest('tr');
+        //     var row = table.row( tr );
     
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
+        //     if ( row.child.isShown() ) {
+        //         // This row is already open - close it
+        //         row.child.hide();
+        //         tr.removeClass('shown');
+        //     }
+        //     else {
+        //         // Open this row
+        //         row.child( format(row.data()) ).show();
+        //         tr.addClass('shown');
+        //     }
+        // } );
+
+        // $(document).on('click', '.DataEntries', function() {    // elements added in the future have to be selected by `$(document).on('click',)`
+        //     alert('row-beginning is clicked!!!!!!!!!!!!!');
+        // });
+        $(document).on('click', '.clickSpan', function() {    // elements added in the future have to be selected by `$(document).on('click',)`
+            //confirm('span clicked.');
+            confirm('before var declared');
+            //confirm('second confirm');
+            //confirm(this); // HTMLSpanElement
+            let thisRow = table.row($(this).closest('tr'));
+            confirm(thisRow);
+            if (thisRow.child.isShown()){
+                alert('shown.');
+                thisRow.child.hide();
                 tr.removeClass('shown');
             }
             else {
-                // Open this row
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
+                confirm('else triggered');
+                row.child(formatDetails(thisRow.data())).show();
             }
-        } );
-
-        $('div .DataEntries').on('click', function(){
-            confirm('in-table div is clicked!');
         });
-        
+
+
+
     });
 
     </script>
@@ -200,7 +227,6 @@
 
 <body>
     <h2>Welcome to Student Manage Management!</h2>
-    <!-- <ol class="my-new-list"></ol> -->
     <div class="inside-center">
         <form>
             <fieldset><legend>Search for Entries:</legend>
@@ -229,36 +255,5 @@
             </div>
         </form>
     </div>
-    <table id="example" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>icons</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Locations</th>
-                <th>Phone Number</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th><div class="DataEntries" style="display:inline-block;">icon</div></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Locations</th>
-                <th>Phone Number</th>
-            </tr>
-        </tfoot>
-    </table>
-
-    <script>
-    //              var items = [];
-//              $.each(data, function(key, val) {
-//                  items.push(`<li id='${key}'>${val.firstname} ${val.lastname} ${val.location} ${val.phone}</li>`);
-//              });
-//              $("<ol/>", {
-//                  "class": "my-new-list",
-//                  html: items.join("")
-//              }).appendTo("body");
-    </script>
 </body>
 </html>
