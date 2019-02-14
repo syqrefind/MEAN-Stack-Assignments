@@ -115,7 +115,10 @@
             var row = $("<tr class='rows'/>");
             rowWithIcon = row.append("<td><span class='clickSpan'><i class='far fa-plus-circle'></i></span></td>");
             $.each(val, function(colIndex, c) { 
-                row.append($("<t"+(key== 0 ?  "h" : "d")+ " class='cells'" +"/>").text(c)); // working
+                //confirm(JSON.stringify(colIndex)); // debug
+                if (colIndex != "address" && colIndex != "marks"){
+                    row.append($("<t"+(key== 0 ?  "h" : "d")+ " class='cells'" +"/>").text(c)); // working
+                }
             });
             table.append(row);
         });
@@ -246,7 +249,7 @@
             };
 
             //confirm(identifiers);
-            console.log(identifiers);
+            // console.log(identifiers);
 
             var qualified = []; // array of qualified objects from 
             var currentOneIsQualified = true;
@@ -254,30 +257,30 @@
             for (var obj of storedData){
                 currentOneIsQualified = true;
 
-                console.log(`current obj is ${obj}`); // debug
+                // console.log(`current obj is ${obj}`); // debug
                 for (const [key, val] of Object.entries(identifiers)){
 
-                    console.log(`current key is ${key}`); // debug
-                    console.log(`current obj value is ${obj[key]}`); // debug
-                    console.log(`current identifier value is ${val}`); // debug
+                    // console.log(`current key is ${key}`); // debug
+                    // console.log(`current obj value is ${obj[key]}`); // debug
+                    // console.log(`current identifier value is ${val}`); // debug
 
                     if(qualify(obj[key], val) == false){
-                        console.log('current value disqualified!!!!!!!!!!!'); // debug
+                        // console.log('current value disqualified!!!!!!!!!!!'); // debug
                         currentOneIsQualified = false;
                     }
                     else{
-                        console.log('current calue qualified!!!!!!!!'); // debug
+                        // console.log('current calue qualified!!!!!!!!'); // debug
                     }
                 }
 
-                console.log(`so, is the overall obj qualified? The answer is ${currentOneIsQualified}`); // debug
+                // console.log(`so, is the overall obj qualified? The answer is ${currentOneIsQualified}`); // debug
                 if (currentOneIsQualified == true){
-                    console.log('current obj is qualified!!!!') // debug
+                    // console.log('current obj is qualified!!!!') // debug
                     qualified.push(obj);
                 }
             }
 
-            console.log(`the qualified objs are ${qualified}`); // debug
+            // console.log(`the qualified objs are ${qualified}`); // debug
             //e.preventDefault();
 
             // Now we display only the qualified objs in the table
