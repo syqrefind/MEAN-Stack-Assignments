@@ -68,6 +68,13 @@
     /* far fa-plus-circle:hover {
         background-color: beige;
     } */
+    .cells:hover {
+        background-color: aqua;
+    }
+    .scrollingTable {
+            width: 30em;
+            overflow-y: auto;
+    }
     
 
     </style>
@@ -75,32 +82,40 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.2/fuse.min.js"></script>
     <script type="text/javascript"> 
-
     function formatDetails (d) {
-    // `d` is the original data object for the row
-    var extra = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Addresses:</td>'+
-            '<td>'+'<select id="subSelect0"></select>'+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Marks:</td>'+
-            '<td>'+'<select id="subSelect1"></select>'+'</td>'+
-        '</tr>'+
-    '</table>';
-    return extra;
+        var extra = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+            '<tr>'+
+                '<td>Addresses:</td>'+
+                '<td>'+'<select id="subSelect0"></select>'+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>Marks:</td>'+
+                '<td>'+'<select id="subSelect1"></select>'+'</td>'+
+            '</tr>'+
+        '</table>';
+        return extra;
+    }
+
+    function search(value, prop, myArray){
+        for (var j = 0; j < myArray.length; j++) {
+            if (myArray[j][prop] === value) {
+                return myArray[j];
+            }
+        }
+        return undefined;
     }
     function makeTable(container, data) {
-        var table = $("<table/>").addClass('CSSTableGenerator');
-        var tableWithHead = table.append('<tr><th>Icon Col.</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Locations</th><th>Phone Number</th></tr>');
+        var table = $("<table/>").addClass('CSSTableGenerator'); // select generated table by this class name 
+        // Table Header 
+        var tableWithHead = table.append('<tr><th></th><th>First Name</th><th>Last Name</th><th>Email</th><th>Locations</th><th>Phone Number</th></tr>');
        
         $.each(data, function(key, val) {
             var row = $("<tr class='rows'/>");
             rowWithIcon = row.append("<td><span class='clickSpan'><i class='far fa-plus-circle'></i></span></td>");
             $.each(val, function(colIndex, c) { 
-                //row.append($("<t"+(key== 0 ?  "h" : "d")+"/>").text(c));
-                row.append($("<t"+(key== 0 ?  "h" : "d")+ " class='cells'" +"/>").text(c));
+                row.append($("<t"+(key== 0 ?  "h" : "d")+ " class='cells'" +"/>").text(c)); // working
             });
             table.append(row);
         });
@@ -146,65 +161,65 @@
 //         }
 //     } );
 // } );
+    function qualify(value1, value2){
+        if (value1 == value2){
+            return true;
+        }
+        else if (value2 == undefined || value2 == "" || value2 == null){
+            return true;
+        }
+        return false;
+       }
+
 
     $(document).ready(function(){
         var currentPage = 0;
         var numRowsPerPage= 10;
+        //var currentPageBeginRow = 0;
+        
+        //var nextPageBeginRow = 11;
 
         $.getJSON( "./dummy.json", function(data) {
-            //confirm(data);
             localStorage.setItem('dummyDataSet', JSON.stringify(data));
             var storedData = JSON.parse(localStorage.getItem('dummyDataSet'));
-            //confirm(storedData);
             var wholeTable = makeTable($(document.body), storedData);
-            $('table tr').hide().slice(0,10).show();
+            $('table tr').hide().slice(0, numRowsPerPage + 1).show();
+            return;
         });
         $('#selector0').change(function(){
-            numRowsPerPage = $('selector0');
-            $('table tr').hide().slice(0,$('#selector0').val()).show();
+            numRowsPerPage = $('#selector0').val();
+            currentPage = 0;
+            $('table tr').hide().slice(currentPage, numRowsPerPage + 1).show();
+            return;
         });
         $('#right').click(function(){
-            //confirm(`'>' is clicked!`)
             if (currentPage == 100 / numRowsPerPage - 1){
-                //confirm('This is already the last page!');
+                confirm('No more pages on the right!');
                 return;
             }
+            $('table tr').hide().slice((currentPage + 1) * numRowsPerPage + 1, (currentPage + 2) * numRowsPerPage + 1).show(); 
             currentPage += 1;
-            $('table tr').hide().slice(currentPage * numRowsPerPage, (currentPage + 1) * numRowsPerPage).show();
-            
+            return;
         });
         $('#left').click(function(){
             if (currentPage <= 0){
                 return;
             }
-            $('table tr').hide().slice((currentPage - 1) * numRowsPerPage, currentPage * numRowsPerPage).show();
+            if (currentPage == 1){
+                $('table tr').hide().slice(0, 11).show();
+                currentPage = 0;
+                return;
+            }
+           
+            $('table tr').hide().slice((currentPage - 1) * numRowsPerPage + 1, currentPage * numRowsPerPage + 1).show();
             currentPage -= 1;
+            return;
         });
 
-        // $('table #example tbody').on('click', 'td.details-control', function () {
-        //     var tr = $(this).closest('tr');
-        //     var row = table.row( tr );
-    
-        //     if ( row.child.isShown() ) {
-        //         // This row is already open - close it
-        //         row.child.hide();
-        //         tr.removeClass('shown');
-        //     }
-        //     else {
-        //         // Open this row
-        //         row.child( format(row.data()) ).show();
-        //         tr.addClass('shown');
-        //     }
-        // } );
-
-        // $(document).on('click', '.DataEntries', function() {    // elements added in the future have to be selected by `$(document).on('click',)`
-        //     alert('row-beginning is clicked!!!!!!!!!!!!!');
-        // });
         $(document).on('click', '.clickSpan', function() {    // elements added in the future have to be selected by `$(document).on('click',)`
-            //confirm('span clicked.');
             confirm('before var declared');
-            //confirm('second confirm');
-            //confirm(this); // HTMLSpanElement
+            //confirm(storedData);
+            // work until here
             let thisRow = table.row($(this).closest('tr'));
             confirm(thisRow);
             if (thisRow.child.isShown()){
@@ -215,10 +230,66 @@
             else {
                 confirm('else triggered');
                 row.child(formatDetails(thisRow.data())).show();
-            }
+            } 
+            return;
         });
 
+        // search 
+        $('#submitSearch').click(function(e){
+            var storedData = JSON.parse(localStorage.getItem('dummyDataSet'));
+            var identifiers = {
+                firstname: $('#firstName').val(),
+                lastname: $('#lastName').val(),
+                email: $('#email').val(),
+                location: $('#location').val(),
+                phone: $('#phoneNumber').val(),
+            };
 
+            //confirm(identifiers);
+            console.log(identifiers);
+
+            var qualified = []; // array of qualified objects from 
+            var currentOneIsQualified = true;
+
+            for (var obj of storedData){
+                currentOneIsQualified = true;
+
+                console.log(`current obj is ${obj}`); // debug
+                for (const [key, val] of Object.entries(identifiers)){
+
+                    console.log(`current key is ${key}`); // debug
+                    console.log(`current obj value is ${obj[key]}`); // debug
+                    console.log(`current identifier value is ${val}`); // debug
+
+                    if(qualify(obj[key], val) == false){
+                        console.log('current value disqualified!!!!!!!!!!!'); // debug
+                        currentOneIsQualified = false;
+                    }
+                    else{
+                        console.log('current calue qualified!!!!!!!!'); // debug
+                    }
+                }
+
+                console.log(`so, is the overall obj qualified? The answer is ${currentOneIsQualified}`); // debug
+                if (currentOneIsQualified == true){
+                    console.log('current obj is qualified!!!!') // debug
+                    qualified.push(obj);
+                }
+            }
+
+            console.log(`the qualified objs are ${qualified}`); // debug
+            //e.preventDefault();
+
+            // Now we display only the qualified objs in the table
+            $('table tr').hide();
+            var resultTable = makeTable($(document.body), qualified);
+            
+            // ******************************
+            // NEXT REQ: INTEGRATE PAGINATION WITH SEARCH RESULTS
+            // ******************************
+
+            return;
+        });
 
     });
 
@@ -228,16 +299,17 @@
 <body>
     <h2>Welcome to Student Manage Management!</h2>
     <div class="inside-center">
-        <form>
             <fieldset><legend>Search for Entries:</legend>
                 <div style="margin:auto;">
-                    <span>First Name:</span><span><input style="display:inline-block"/></span>
-                    <span>Last Name:</span><span><input style="display:inline-block"/></span>
-                    <span>Location:</span><span><input style="display:inline-block"/></span>
-                    <span>Phone Number:</span><span><input style="display:inline-block"/></span>
+                    <span>First Name:</span><span><input id='firstName' style="display:inline-block"/></span>
+                    <span>Last Name:</span><span><input id='lastName' style="display:inline-block"/></span>
+                    <span>Email:</span><span><input id='email' style="display:inline-block"/></span>
+                    <span>Location:</span><span><input id='location' style="display:inline-block"/></span>
+                    <span>Phone Number:</span><span><input id='phoneNumber' style="display:inline-block"/></span>
+                    <button id='submitSearch' type='button'>Search!</button>
+                    <!-- <div id='submitSearch' style="display:inline-block;">Search!</div> -->
                 </div>
             </fieldset>
-        </form>
     </div>
     <div>
         <form>
