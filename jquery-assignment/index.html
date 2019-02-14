@@ -8,73 +8,121 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <style>
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
+        body, html {
+            height: 100%;
+        }
+
+        .bg { 
+            background-image: url(https://images.unsplash.com/photo-1506102383123-c8ef1e872756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3450&q=80);
+
+            height: 100%; 
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        h2 {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: 80px;
+            text-align: center;
+            /* background-color: antiquewhite; */
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin: auto;
         }
 
         td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
+            border: 1px solid #dddddd;
+            /* border: none; */
+            text-align: left;
+            padding: 8px;
         }
 
-        tr:nth-child(even) {
-        background-color: #dddddd;
+        /* tr:nth-child(even) {
+            background-color: #dddddd;
+        } */
+        
+        div .inside-center{
+            text-align: center;
+        }
+
+        div .inside-center span{
+            text-align: left;
+        }
+        div .inside-center span:first-of-type{
+            text-align: right;
+        }
+        div .navi {
+            display:inline-block;
+        }
+        div .icon {
+            display: inline-block;
+            background-color: beige;
         }
     
-    div .inside-center{
-        text-align: center;
-    }
-
-    div .inside-center span{
-        text-align: left;
-    }
-    div .inside-center span:first-of-type{
-        text-align: right;
-    }
-    div .navi {
-        display:inline-block;
-    }
-    div .icon {
-        display: inline-block;
-        background-color: beige;
-    }
-   
-    td.details-control {
-        background: url('../resources/details_open.png') no-repeat center center;
-        cursor: pointer;
-    }
-    tr.shown td.details-control {
-        background: url('../resources/details_close.png') no-repeat center center;
-    }
-    div .DataEntries{
-        display: inline-block;
-        text-align: center;
-    }
-    .DataEntries:hover {
-        background-color: aliceblue;
-    }
-    .rows:hover {
-        background-color: antiquewhite;
-    }
-    th {
-        text-align: center;
-    }
-    td{
-        text-align: center;
-    }
-    /* far fa-plus-circle:hover {
-        background-color: beige;
-    } */
-    .cells:hover {
-        background-color: aqua;
-    }
-    .scrollingTable {
-            width: 30em;
-            overflow-y: auto;
-    }
+        td.details-control {
+            background: url('../resources/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('../resources/details_close.png') no-repeat center center;
+        }
+        div .DataEntries{
+            display: inline-block;
+            text-align: center;
+        }
+        .DataEntries:hover {
+            background-color: aliceblue;
+        }
+        .rows:hover {
+            background-color: antiquewhite;
+        }
+        th {
+            text-align: center;
+        }
+        td{
+            text-align: center;
+        }
+        /* far fa-plus-circle:hover {
+            background-color: beige;
+        } */
+        .cells:hover {
+            background-color: aqua;
+        }
+        .scrollingTable {
+                width: 30em;
+                overflow-y: auto;
+        }
+        .coloredDiv {
+            background-color: azure;
+        }
+        .inputBox {
+            background-color:rgba(0, 0, 0, 0);
+            color:white;
+            border: none;
+            outline:none;
+            height:30px;
+            transition:height 1s;
+            -webkit-transition:height 1s;
+        }
+        .inputBox:focus{
+            height:50px;
+            font-size:16px;
+        }
+        .transparentButtons{
+            background-color:rgba(0, 0, 0, 0);
+            color:white;
+            border: none;
+            outline:none;
+            height:30px;
+            transition:height 1s;
+            -webkit-transition:height 1s;
+        }
     
 
     </style>
@@ -190,6 +238,7 @@
             return;
         });
         $('#selector0').change(function(){
+            
             numRowsPerPage = $('#selector0').val();
             currentPage = 0;
             $('table tr').hide().slice(currentPage, numRowsPerPage + 1).show();
@@ -281,7 +330,6 @@
             }
 
             // console.log(`the qualified objs are ${qualified}`); // debug
-            //e.preventDefault();
 
             // Now we display only the qualified objs in the table
             $('table tr').hide();
@@ -291,6 +339,7 @@
             // NEXT REQ: INTEGRATE PAGINATION WITH SEARCH RESULTS
             // ******************************
 
+            e.preventDefault();
             return;
         });
 
@@ -299,17 +348,17 @@
     </script>
 </head>
 
-<body>
+<body background='https://images.unsplash.com/photo-1506102383123-c8ef1e872756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3450&q=80'>
     <h2>Welcome to Student Manage Management!</h2>
     <div class="inside-center">
             <fieldset><legend>Search for Entries:</legend>
                 <div style="margin:auto;">
-                    <span>First Name:</span><span><input id='firstName' style="display:inline-block"/></span>
-                    <span>Last Name:</span><span><input id='lastName' style="display:inline-block"/></span>
-                    <span>Email:</span><span><input id='email' style="display:inline-block"/></span>
-                    <span>Location:</span><span><input id='location' style="display:inline-block"/></span>
-                    <span>Phone Number:</span><span><input id='phoneNumber' style="display:inline-block"/></span>
-                    <button id='submitSearch' type='button'>Search!</button>
+                    <span>First Name:</span><span><input id='firstName' class='inputBox' style="display:inline-block"/></span>
+                    <span>Last Name:</span><span><input id='lastName' class='inputBox' style="display:inline-block"/></span>
+                    <span>Email:</span><span><input id='email' class='inputBox' style="display:inline-block"/></span>
+                    <span>Location:</span><span><input id='location' class='inputBox' style="display:inline-block"/></span>
+                    <span>Phone Number:</span><span><input id='phoneNumber' class='inputBox' style="display:inline-block"/></span>
+                    <button id='submitSearch' type='button' class='transparentButtons'>Search!</button>
                     <!-- <div id='submitSearch' style="display:inline-block;">Search!</div> -->
                 </div>
             </fieldset>
